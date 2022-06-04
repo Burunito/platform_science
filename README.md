@@ -42,8 +42,8 @@ The first approach was choose a language to work with, i choose php that is more
 
 ## Sources
 
-Hungarian algorythm https://en.wikipedia.org/wiki/Hungarian_algorithm
-Hungarian algorythm PHP https://github.com/rpfk/Hungarian
+- Hungarian algorythm https://en.wikipedia.org/wiki/Hungarian_algorithm
+- Hungarian algorythm PHP https://github.com/rpfk/Hungarian
 
 ### How to install
 
