@@ -63,5 +63,5 @@ The first approach was choose a language to work with, i choose php that is more
 - Then it will show you the score, followed of all the combinations and its individual score
 
 <p align="center">
-<img src="https://travis-ci.org/laravel/framework.svg" alt="example">
+<img src="https://github.com/Burunito/platform_science/blob/main/public/example.jpg?raw=true" alt="example">
 </p>
