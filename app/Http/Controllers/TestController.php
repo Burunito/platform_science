@@ -11,22 +11,30 @@ class TestController extends Controller
     private $fileDestinations;
     private $fileDrivers;
     
+    /**
+     * Construct to initialize object and files
+     *
+     * @return void
+     */
     public function __construct(string $fileDestinations, string $fileDrivers)
     { 
         $this->fileDestinations = $fileDestinations;
         $this->fileDrivers = $fileDrivers;
     }
+
     /**
-     * Display a listing of the resource.
+     * Main function
      *
-     * @return \Illuminate\Http\Response
+     * @return Array    Array with the total and the best combination human readable
      */
-    public function test()
+    public function test():array
     {
         //Reading files
         $fileDestinations = file_get_contents($this->fileDestinations);
         $fileDrivers = file_get_contents($this->fileDrivers);
+
         if (!$fileDestinations || !$fileDrivers) {
+            //Error if file not founds
             return 'Cant find file :'. !$fileDestinations ? $this->fileDestinations : $this->fileDestinations;
         }
 
@@ -46,13 +54,28 @@ class TestController extends Controller
         return ["total" => $bestCombinations['total'], "result" => $textResult];
     }
 
-    private function getFileData($fileData)
+    /**
+     * Explode the file input on array
+     *
+     * @filedata string
+     * 
+     * @return array    Array with all records of the file
+     */
+    private function getFileData($fileData):array
     {
         $records = explode("\n", $fileData);
         return $records;
     }
 
-    private function getMatrixCombinations(array $drivers, array $destinations)
+    /**
+     * Get the matrix with all cost combinations
+     *
+     * @drivers array   records of the drivers
+     * @destinations array  records of the destinations
+     * 
+     * @return array    Array with all records of the file
+     */
+    private function getMatrixCombinations(array $drivers, array $destinations):array
     {
         $matrixCombinations = [];
 
@@ -65,13 +88,22 @@ class TestController extends Controller
         return $matrixCombinations;
     }
 
-    private function getBestCombinations(array $matrixCombinations)
+    /**
+     * Get the best combination with the hungarian algoryth and it also returns the total of min SS
+     *
+     * @matrixCombinations array   Matrix with all cost combinations
+     * 
+     * @return array    Array with the best combination and the total of min SS
+     */
+    private function getBestCombinations(array $matrixCombinations):array
     {
-        $hungarian = new Hungarian($matrixCombinations);
-        $result = $hungarian->solve();
         $positions = [];
         $minSS = 0;
-        foreach($result as $posX => $posY){
+        //Call to our helper
+        $hungarian = new Hungarian($matrixCombinations);
+        $result = $hungarian->solve();
+        //Change the format of returned array and get the min SS
+        foreach ($result as $posX => $posY) {
             $positions[] = ["X" => $posX, "Y" => $posY];
             $minSS += $matrixCombinations[$posX][$posY];
         }
@@ -79,7 +111,15 @@ class TestController extends Controller
         return ["positions" => $positions, "total" => $minSS];
     }
 
-    private function getSuitabilityScore(string $driver, string $destination)
+    /**
+     * Calculate the suitability score based on practice statement
+     *
+     * @driver string        The driver's name
+     * @destination string   The destination string
+     * 
+     * @return float    The SS score
+     */
+    private function getSuitabilityScore(string $driver, string $destination):float
     {
         $score = strlen($destination) % 2 == 0 ? ($this->countVowels($driver) * 1.5) : $this->countConsonants($driver);
 
@@ -90,7 +130,17 @@ class TestController extends Controller
         return $score;
     }
 
-    private function getResultText(array $drivers, array $destinations, array $positions, array $matrix)
+    /**
+     * Get the result on readable format
+     *
+     * @drivers array        Drivers array to get names
+     * @destinations array   Destinations array to get destination
+     * @positions array   The best combination possible [(x,y)]
+     * @matrix array   All the matrix to get individualy cost of combinations
+     * 
+     * @return array    Return readable combinations
+     */
+    private function getResultText(array $drivers, array $destinations, array $positions, array $matrix):array
     {
         $combinations = [];
         foreach ($positions as $position) {
@@ -103,17 +153,40 @@ class TestController extends Controller
         return $combinations;
     }
 
-    private function countVowels(string $string)
+    /**
+     * Count how many vowels has a string
+     *
+     * @string string    String to count vowels
+     * 
+     * @return integer    Return number of vowels
+     */
+    private function countVowels(string $string):int
     {
         return preg_match_all('/[aeiou]/i',$string);
     }
 
-    private function countConsonants(string $string)
+    /**
+     * Count how many consonants has a string
+     *
+     * @string string    String to count consonants
+     * 
+     * @return integer    Return number of consonants
+     */
+    private function countConsonants(string $string):int
     {
         return preg_match_all('/[bcdfghjklmnpqrstvwxyz]/i',$string);
     }
 
-    private function getCommonFactors($numberA, $numberB) {
+    /**
+     * Finds the common factor betweens two numbers
+     *
+     * @numberA integer   Number a 
+     * @numberB integer   Number b
+     * 
+     * @return integer  If returns 1 Just 1 is the common factor
+     */
+    private function getCommonFactors($numberA, $numberB):int
+    {
         return ($numberA % $numberB) ? $this->getCommonFactors($numberB, $numberA % $numberB) : $numberB;
     }
 }
