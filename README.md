@@ -40,6 +40,11 @@ The first approach was choose a language to work with, i choose php that is more
 - When the library returns the result, i just asign to an array all the posible combinations to a human readeable text, and make the return array for the command line, but also i divide by 10 all the cost results, for comeback to normal values all the cost
 - Finnally i just iterate the results to show on display
 
+## Sources
+
+Hungarian algorythm https://en.wikipedia.org/wiki/Hungarian_algorithm
+Hungarian algorythm PHP https://github.com/rpfk/Hungarian
+
 ### How to install
 
 - Install composer (https://getcomposer.org)
@@ -48,6 +53,7 @@ The first approach was choose a language to work with, i choose php that is more
 	git clone https://github.com/Burunito/platform_science.git platform_science
 	cd platform_science
 	composer install
+
 ## Usage
 - You can just run the follwing command to execute with the examples doesnt type any path for inputs and will execute with the examples files
 	php artisan test:run
