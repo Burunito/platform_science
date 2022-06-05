@@ -52,8 +52,11 @@ The first approach was choose a language to work with, i choose php that is more
 - Install composer (https://getcomposer.org)
 - Install git (https://git-scm.com/downloads)
 - Run the following commands
+
 	git clone https://github.com/Burunito/platform_science.git platform_science
+
 	cd platform_science
+	
 	composer install
 
 ## Usage
